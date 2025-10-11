@@ -15,5 +15,14 @@
 - [x] Create .env file with API key placeholder
 - [x] Edit utils/responses.js to use OpenAI API
 - [x] Edit index.js to integrate OpenAI responses with spinner
-- [ ] Install new dependencies
-- [ ] Test upgraded bot with npm start
+- [x] Install new dependencies
+- [x] Test upgraded bot with npm start
+
+# Multi-AI Fallback Upgrade
+- [x] Update package.json with axios dependency
+- [x] Create .env file with OPENAI_URL and GEMINI_APIS
+- [x] Edit utils/responses.js for multi-AI fallback logic with handleChatInput, logging, and env checks
+- [x] Add samkiel-birthday-bot/TODO.md to .gitignore
+- [x] Edit index.js to use handleChatInput, apply gradient styling, update startup message, add .env confirmation
+- [ ] Install axios
+- [ ] Test multi-AI fallback with fixes

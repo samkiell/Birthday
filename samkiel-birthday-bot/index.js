@@ -3,8 +3,11 @@ import chalk from 'chalk';
 import gradient from 'gradient-string';
 import readline from 'readline';
 import ora from 'ora';
+import dotenv from 'dotenv';
 import { simulateBootSequence, randomDelay } from './utils/animations.js';
-import { getAIResponse } from './utils/responses.js';
+import { handleChatInput } from './utils/responses.js';
+
+dotenv.config();
 
 async function displayLogo() {
   console.clear();
@@ -21,7 +24,7 @@ async function displayStartupMessages() {
   await randomDelay(1000, 2000);
   console.log(chalk.blue('🤖 Happy Birthday, Developer Samkiel (Samuel Ezekiel)!'));
   await randomDelay(1000, 2000);
-  console.log(chalk.green('System uptime: 19 years — stable, evolving, and digitalizing the world.'));
+  console.log(chalk.green('You’ve leveled up to v19.0 — new features unlocked!'));
   await randomDelay(1000, 2000);
   console.log(chalk.magenta('Mission: Continue innovating, creating, and leading the future of technology.'));
   console.log(chalk.gray('='.repeat(50)));
@@ -45,9 +48,12 @@ async function startChat() {
 
       const spinner = ora(chalk.cyan('Processing request...')).start();
       try {
-        const response = await getAIResponse(input);
+        const result = await handleChatInput(input);
         spinner.succeed(chalk.green('Response generated'));
-        console.log(chalk.bold.green('Bot: ') + response);
+        console.log(chalk.green(`Time taken: ${result.timeTaken}ms`));
+        console.log(chalk.blue(`URL used: ${result.urlUsed}`));
+        const fullResponse = `${result.response}\n\n[AI ENGINE: ${result.engine}]\n[SYSTEM READY – Awaiting next command...]`;
+        console.log(chalk.bold.green('Bot: ') + gradient.rainbow(fullResponse));
       } catch (error) {
         spinner.fail(chalk.red('Error processing request'));
         console.log(chalk.bold.red('Bot: ') + gradient.rainbow('[SYSTEM ERROR] Neural circuits misaligned.'));
@@ -61,6 +67,11 @@ async function startChat() {
 }
 
 async function main() {
+  if (process.env.OPENAI_URL && process.env.GEMINI_APIS) {
+    console.log('✅ .env variables loaded successfully');
+  } else {
+    console.error('✖ .env variables not loaded');
+  }
   await displayLogo();
   await simulateBootSequence();
   await displayStartupMessages();
