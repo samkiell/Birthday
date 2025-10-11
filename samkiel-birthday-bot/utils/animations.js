@@ -11,7 +11,7 @@ export async function showLoading(message, duration = 2000) {
     spinner: 'dots'
   }).start();
   await new Promise(resolve => setTimeout(resolve, duration));
-  spinner.succeed(chalk.green('Complete'));
+  spinner.succeed(chalk.green('✔ Complete'));
 }
 
 export async function simulateBootSequence() {

@@ -9,20 +9,16 @@ export async function getAIResponse(query) {
   const geminiApisStr = process.env.GEMINI_APIS;
 
   if (!openaiUrl || !geminiApisStr) {
-    console.error('✖ Missing .env variables: OPENAI_URL or GEMINI_APIS');
-    return { response: '[SYSTEM ERROR] Neural circuits misaligned.', engine: 'Error', timeTaken: 0, urlUsed: '' };
+    return '⚠️ System error — please retry.';
   }
 
   const geminiApis = geminiApisStr.split(',');
-  const startTime = Date.now();
 
   try {
     // --- PRIMARY: OpenAI ---
     const openaiRes = await axios.get(`${openaiUrl}?text=${encodeURIComponent(query)}`, { timeout: 15000 });
     if (openaiRes.data?.success && openaiRes.data.result?.prompt) {
-      const timeTaken = Date.now() - startTime;
-      console.log('✅ Response received successfully');
-      return { response: openaiRes.data.result.prompt, engine: 'OpenAI', timeTaken, urlUsed: openaiUrl };
+      return openaiRes.data.result.prompt;
     }
     throw new Error('Invalid OpenAI response format');
   } catch (error) {
@@ -35,17 +31,14 @@ export async function getAIResponse(query) {
     try {
       const res = await axios.get(`${api}${encodeURIComponent(query)}`, { timeout: 15000 });
       if (res.data?.success && (res.data.result || res.data.response)) {
-        const timeTaken = Date.now() - startTime;
-        console.log('✅ Response received successfully');
-        return { response: res.data.result || res.data.response, engine: `Gemini #${i + 1}`, timeTaken, urlUsed: api };
+        return res.data.result || res.data.response;
       }
     } catch (err) {
       // Silent
     }
   }
 
-  const timeTaken = Date.now() - startTime;
-  return { response: 'Unable to process your request right now.', engine: 'Error', timeTaken, urlUsed: '' };
+  return '⚠️ System error — please retry.';
 }
 
 // --- MAIN HANDLER ---
@@ -57,7 +50,6 @@ export async function handleChatInput(query) {
     const response = await getAIResponse(fullQuery);
     return response;
   } catch (error) {
-    console.error('✖ Error processing request:', error.message);
-    return { response: 'Unable to process your request right now.', engine: 'Error', timeTaken: 0, urlUsed: '' };
+    return '⚠️ System error — please retry.';
   }
 }

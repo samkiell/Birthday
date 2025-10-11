@@ -1,7 +1,7 @@
 import figlet from 'figlet';
 import chalk from 'chalk';
 import gradient from 'gradient-string';
-import readline from 'readline';
+import readlineSync from 'readline-sync';
 import ora from 'ora';
 import dotenv from 'dotenv';
 import { simulateBootSequence, randomDelay } from './utils/animations.js';
@@ -29,38 +29,27 @@ async function displayStartupMessages() {
   console.log(chalk.magenta('Mission: Continue innovating, creating, and leading the future of technology.'));
   console.log(chalk.dim.gray('='.repeat(50)));
   console.log(chalk.cyan('Chat system activated. Type your message or "exit" to quit.'));
+  console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.whiteBright("Created by Developer Samkiel — a full-stack engineer and cyber security enthusiast from Osun, Nigeria, building futuristic systems under SAMKIEL."));
   console.log();
 }
 
 async function startChat() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+  while (true) {
+    const query = readlineSync.question("You: ");
+    if (query.toLowerCase() === "exit") {
+      console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.whiteBright("Session terminated. Goodbye, Developer Samkiel."));
+      break;
+    }
 
-  const askQuestion = () => {
-    rl.question(chalk.bold.yellow('You: '), async (input) => {
-      if (input.toLowerCase() === 'exit') {
-        console.log(gradient.rainbow('Shutting down SAMKIEL BIRTHDAY BOT... Farewell, Developer!'));
-        rl.close();
-        return;
-      }
+    console.log("⠋ Processing request...");
 
-      const spinner = ora(chalk.cyan('Processing request...')).start();
-      try {
-        const result = await handleChatInput(input);
-        spinner.succeed(chalk.green('Response received'));
-        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel(result.response));
-      } catch (error) {
-        spinner.fail(chalk.red('Error processing request'));
-        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel('Unable to process your request right now.'));
-      }
-      console.log();
-      askQuestion();
-    });
-  };
-
-  askQuestion();
+    try {
+      const response = await handleChatInput(query);
+      console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.whiteBright(response));
+    } catch (err) {
+      console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.red.bold("⚠️ System error — please retry."));
+    }
+  }
 }
 
 async function main() {
