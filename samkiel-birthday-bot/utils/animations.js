@@ -7,11 +7,11 @@ export function randomDelay(min = 500, max = 2000) {
 
 export async function showLoading(message, duration = 2000) {
   const spinner = ora({
-    text: chalk.cyan(message),
+    text: chalk.green.bold(message),
     spinner: 'dots'
   }).start();
   await new Promise(resolve => setTimeout(resolve, duration));
-  spinner.succeed(chalk.green('Complete'));
+  spinner.succeed(chalk.green.bold('✔ Complete'));
 }
 
 export async function simulateBootSequence() {

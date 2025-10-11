@@ -20,15 +20,15 @@ async function displayLogo() {
 }
 
 async function displayStartupMessages() {
-  console.log(chalk.yellow('🎉 Initializing SAMKIEL BIRTHDAY BOT protocol...'));
+  console.log(chalk.green.bold('🎉 Initializing SAMKIEL BIRTHDAY BOT protocol...'));
   await randomDelay(1000, 2000);
-  console.log(chalk.blue('🤖 Happy Birthday, Developer Samkiel (Samuel Ezekiel)!'));
+  console.log(chalk.green.bold('🤖 Happy Birthday, Developer Samkiel (Samuel Ezekiel)!'));
   await randomDelay(1000, 2000);
-  console.log(chalk.green('You’ve leveled up to v19.0 — new features unlocked!'));
+  console.log(chalk.green.bold('You’ve leveled up to v19.0 — new features unlocked!'));
   await randomDelay(1000, 2000);
-  console.log(chalk.magenta('Mission: Continue innovating, creating, and leading the future of technology.'));
+  console.log(chalk.green.bold('Mission: Continue innovating, creating, and leading the future of technology.'));
   console.log(chalk.dim.gray('='.repeat(50)));
-  console.log(chalk.cyan('Chat system activated. Type your message or "exit" to quit.'));
+  console.log(chalk.green.bold('Chat system activated. Type your message or "exit" to quit.'));
   console.log();
 }
 
@@ -39,21 +39,21 @@ async function startChat() {
   });
 
   const askQuestion = () => {
-    rl.question(chalk.bold.yellow('You: '), async (input) => {
+    rl.question(chalk.magenta.bold('You: '), async (input) => {
       if (input.toLowerCase() === 'exit') {
         console.log(gradient.rainbow('Shutting down SAMKIEL BIRTHDAY BOT... Farewell, Developer!'));
         rl.close();
         return;
       }
 
-      const spinner = ora(chalk.cyan('Processing request...')).start();
+      const spinner = ora(chalk.yellow('Processing request...')).start();
       try {
         const result = await handleChatInput(input);
         spinner.succeed(chalk.green('Response received'));
-        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel(result.response));
+        console.log(chalk.cyan.bold('Bot [SAMKIEL V1.1]: ') + chalk.white(result.response));
       } catch (error) {
-        spinner.fail(chalk.red('Error processing request'));
-        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel('Unable to process your request right now.'));
+        spinner.fail(chalk.red.bold('Error processing request'));
+        console.log(chalk.cyan.bold('Bot [SAMKIEL V1.1]: ') + chalk.red.bold('⚠️ System error — please retry.'));
       }
       console.log();
       askQuestion();
@@ -64,11 +64,6 @@ async function startChat() {
 }
 
 async function main() {
-  if (process.env.OPENAI_URL && process.env.GEMINI_APIS) {
-    console.log('✅ .env variables loaded successfully');
-  } else {
-    console.error('✖ .env variables not loaded');
-  }
   await displayLogo();
   await simulateBootSequence();
   await displayStartupMessages();
