@@ -41,12 +41,14 @@ async function startChat() {
       break;
     }
 
-    console.log("⠋ Processing request...");
+    const spinner = ora("Processing request...").start();
 
     try {
       const response = await handleChatInput(query);
+      spinner.succeed("✅ Response received");
       console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.whiteBright(response));
     } catch (err) {
+      spinner.fail("⚠️ System error — please retry.");
       console.log(chalk.cyan.bold("Bot [SAMKIEL V1.1]: ") + chalk.red.bold("⚠️ System error — please retry."));
     }
   }
