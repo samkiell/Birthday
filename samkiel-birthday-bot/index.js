@@ -11,12 +11,12 @@ dotenv.config();
 
 async function displayLogo() {
   console.clear();
-  const logo = figlet.textSync('SAMKIEL BIRTHDAY BOT v1.0', {
+  const logo = figlet.textSync('SAMKIEL BIRTHDAY BOT v1.1', {
     font: 'Small',
     horizontalLayout: 'default'
   });
   console.log(gradient.rainbow(logo));
-  console.log(chalk.gray('='.repeat(50)));
+  console.log(chalk.dim.gray('='.repeat(50)));
 }
 
 async function displayStartupMessages() {
@@ -27,7 +27,7 @@ async function displayStartupMessages() {
   console.log(chalk.green('You’ve leveled up to v19.0 — new features unlocked!'));
   await randomDelay(1000, 2000);
   console.log(chalk.magenta('Mission: Continue innovating, creating, and leading the future of technology.'));
-  console.log(chalk.gray('='.repeat(50)));
+  console.log(chalk.dim.gray('='.repeat(50)));
   console.log(chalk.cyan('Chat system activated. Type your message or "exit" to quit.'));
   console.log();
 }
@@ -39,7 +39,7 @@ async function startChat() {
   });
 
   const askQuestion = () => {
-    rl.question(chalk.bold.blue('You: '), async (input) => {
+    rl.question(chalk.bold.yellow('You: '), async (input) => {
       if (input.toLowerCase() === 'exit') {
         console.log(gradient.rainbow('Shutting down SAMKIEL BIRTHDAY BOT... Farewell, Developer!'));
         rl.close();
@@ -49,14 +49,11 @@ async function startChat() {
       const spinner = ora(chalk.cyan('Processing request...')).start();
       try {
         const result = await handleChatInput(input);
-        spinner.succeed(chalk.green('Response generated'));
-        console.log(chalk.green(`Time taken: ${result.timeTaken}ms`));
-        console.log(chalk.blue(`URL used: ${result.urlUsed}`));
-        const fullResponse = `${result.response}\n\n[AI ENGINE: ${result.engine}]\n[SYSTEM READY – Awaiting next command...]`;
-        console.log(chalk.bold.green('Bot: ') + gradient.rainbow(fullResponse));
+        spinner.succeed(chalk.green('Response received'));
+        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel(result.response));
       } catch (error) {
         spinner.fail(chalk.red('Error processing request'));
-        console.log(chalk.bold.red('Bot: ') + gradient.rainbow('[SYSTEM ERROR] Neural circuits misaligned.'));
+        console.log(chalk.cyan('Bot (SAMKIEL v1.1): ') + gradient.pastel('Unable to process your request right now.'));
       }
       console.log();
       askQuestion();

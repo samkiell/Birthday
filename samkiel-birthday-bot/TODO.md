@@ -24,5 +24,7 @@
 - [x] Edit utils/responses.js for multi-AI fallback logic with handleChatInput, logging, and env checks
 - [x] Add samkiel-birthday-bot/TODO.md to .gitignore
 - [x] Edit index.js to use handleChatInput, apply gradient styling, update startup message, add .env confirmation
+- [x] Add engine indicator, persistent chat loop, smart logging with time/colors, and response footer
+- [x] Refine to v1.1: remove engine/API logs from output, improve colors/readability, adjust bot personality, continuous loop
 - [ ] Install axios
-- [ ] Test multi-AI fallback with fixes
+- [ ] Test refined bot v1.1 with clean output and styling

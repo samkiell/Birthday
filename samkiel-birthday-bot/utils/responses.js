@@ -18,36 +18,34 @@ export async function getAIResponse(query) {
 
   try {
     // --- PRIMARY: OpenAI ---
-    console.log('🤖 Using OpenAI Engine');
     const openaiRes = await axios.get(`${openaiUrl}?text=${encodeURIComponent(query)}`, { timeout: 15000 });
     if (openaiRes.data?.success && openaiRes.data.result?.prompt) {
       const timeTaken = Date.now() - startTime;
-      console.log('✅ Response received successfully (OpenAI)');
+      console.log('✅ Response received successfully');
       return { response: openaiRes.data.result.prompt, engine: 'OpenAI', timeTaken, urlUsed: openaiUrl };
     }
     throw new Error('Invalid OpenAI response format');
   } catch (error) {
-    console.warn('⚠️ OpenAI failed. Switching to Gemini fallback...');
+    // Silent fallback
   }
 
   // --- FALLBACK: Gemini APIs ---
   for (let i = 0; i < geminiApis.length; i++) {
     const api = geminiApis[i];
     try {
-      console.log(`🌐 Using Gemini Engine #${i + 1} (${api})`);
       const res = await axios.get(`${api}${encodeURIComponent(query)}`, { timeout: 15000 });
       if (res.data?.success && (res.data.result || res.data.response)) {
         const timeTaken = Date.now() - startTime;
-        console.log('✅ Response received successfully (Gemini)');
+        console.log('✅ Response received successfully');
         return { response: res.data.result || res.data.response, engine: `Gemini #${i + 1}`, timeTaken, urlUsed: api };
       }
     } catch (err) {
-      console.warn(`⚠️ Gemini API failed: ${api}`);
+      // Silent
     }
   }
 
   const timeTaken = Date.now() - startTime;
-  return { response: '[SYSTEM ERROR] Neural circuits misaligned.', engine: 'Error', timeTaken, urlUsed: '' };
+  return { response: 'Unable to process your request right now.', engine: 'Error', timeTaken, urlUsed: '' };
 }
 
 // --- MAIN HANDLER ---
@@ -60,6 +58,6 @@ export async function handleChatInput(query) {
     return response;
   } catch (error) {
     console.error('✖ Error processing request:', error.message);
-    return '[SYSTEM ERROR] Neural circuits misaligned.';
+    return { response: 'Unable to process your request right now.', engine: 'Error', timeTaken: 0, urlUsed: '' };
   }
 }
